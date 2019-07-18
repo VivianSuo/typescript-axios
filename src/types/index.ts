@@ -8,7 +8,8 @@ export interface AxiosRequestConfig {
   headers?: {
     [propName:string]:any
   };
-  responseType?:XMLHttpRequestResponseType
+  responseType?:XMLHttpRequestResponseType,
+  timeout?:number
 }
 
 export interface AxiosResponse{

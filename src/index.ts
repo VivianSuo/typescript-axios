@@ -26,6 +26,7 @@ function transformRequestData(config: AxiosRequestConfig):void{
   return transformRequest(config.data)
 }
 
+// 处理headers
 function transformHeaders(config: AxiosRequestConfig):any{
   const {headers = {} , data} = config
   return processHeaders(headers,data)
