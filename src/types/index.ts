@@ -48,7 +48,9 @@ export interface Axios {
   patch(url:string,data?:any,config?:AxiosRequestConfig):AxiosPromise;
 }
 
-// AxiosInstance定义的是一个函数接口
+// AxiosInstance定义的是一个函数接口 ,支持重载
 export interface AxiosInstance extends Axios{
   (config:AxiosRequestConfig):AxiosPromise
+  (url:string,config?:AxiosRequestConfig):AxiosPromise
 }
+
