@@ -1,6 +1,7 @@
-import { AxiosRequestConfig,AxiosPromise, AxiosResponse } from './types'
-import { parseHeaders } from './helpers/headers'
-import { transformResponse } from './helpers/data'
+import { AxiosRequestConfig,AxiosPromise, AxiosResponse } from '../types'
+import { parseHeaders } from '../helpers/headers'
+import { transformResponse } from '../helpers/data'
+import { AxiosError } from '../helpers/error'
 // 发送http请求的方法
 // 定义了AxiosPromise接口继承了Promise<AxiosResponse>泛型，那么函数返回的值是promise且其构造函数的参数是AxiosResponse类型
 export default function xhr(config: AxiosRequestConfig): AxiosPromise{
@@ -46,16 +47,16 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise{
       if(response.status >= 200 && response.status <= 300){
         resolve(response)
       }else{
-        reject(new Error(`Request failed with status code ${response.status}`))
+        reject(new AxiosError(`Request failed with status code ${response.status}`,config,null,request,response))
       }
     }
     // 网络不通时触发
     request.onerror = function handleError(){
-      reject(new Error('network error'))
+      reject(new AxiosError('network error',config,null,request))
     }
     // 网络超时时触发
     request.ontimeout = function handleTimeout(){
-      reject(new Error(`Timeout of ${timeout}ms exceeded`))
+      reject(new AxiosError(`Timeout of ${timeout}ms exceeded`,config,'ECONNABORTED',request))
     }
     Object.keys(headers).forEach(name => {
       if (data === null && name.toLowerCase() === 'content-type') {

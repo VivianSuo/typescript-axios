@@ -71,6 +71,35 @@ router.get('/error/timeout',(req,res)=>{
     })
   },3000)
 })
+
+router.post('/extend/post',(req,res)=>{
+  res.json({
+    msg:'haha post'
+  })
+})
+router.get('/extend/get', (req, res) => {
+  res.json({
+    msg: 'haha get'
+  })
+})
+router.all('/extend/delete',(req,res,next)=>{
+  res.json({
+    msg: 'delete'
+  })
+  next()
+})
+router.all('/extend/options',(req,res,next)=>{
+  res.json({
+    msg:'options'
+  })
+  next()
+})
+router.all('/extend/put',(req,res,next)=>{
+  res.json({
+    msg:'put'
+  })
+  next()
+})
 app.use(router)
 
 
