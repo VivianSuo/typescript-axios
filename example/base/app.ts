@@ -64,7 +64,6 @@ axios({
 axios({
   method: 'post',
   url: '/base/post',
-  responseType: { 'content-type':'application/json;charset=utf-8'},
   headers: {
     'content-type':'application/json;charset=utf-8'
   },
