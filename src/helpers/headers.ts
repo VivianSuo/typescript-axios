@@ -1,4 +1,5 @@
-import { isPlainObject } from './util'
+import { isPlainObject,deepMerge } from './util'
+import { Method } from '../types'
 // 针对content-type的headers属性进行操作，1、对headers中没有content-type项的添加content-type，2、对有content-type项的将不规范的书写方式进行规范化
 export function processHeaders(headers:any,data:any):any{
   // debugger;
@@ -44,4 +45,16 @@ export function parseHeaders(headers?:string):any{
     
   })
   return parse
+}
+
+export function flatenHeaders(headers:any,methods:Method):any{
+  if(!headers){
+    return 
+  }
+  headers = deepMerge(headers.common || {}, headers[methods] || {},headers);
+  const methodsToDelete = ['delete', 'get', 'head', 'options', 'post', 'put', 'patch', 'common'];
+  methodsToDelete.forEach(method=>{
+    delete headers[method]
+  })
+  return headers
 }

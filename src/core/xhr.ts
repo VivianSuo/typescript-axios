@@ -1,7 +1,8 @@
 import { AxiosRequestConfig,AxiosPromise, AxiosResponse } from '../types'
 import { parseHeaders } from '../helpers/headers'
 import { transformResponse } from '../helpers/data'
-import { AxiosError } from '../helpers/error'
+import { AxiosError } from '../helpers/error';
+import transform from './transform'
 // 发送http请求的方法
 // 定义了AxiosPromise接口继承了Promise<AxiosResponse>泛型，那么函数返回的值是promise且其构造函数的参数是AxiosResponse类型
 export default function xhr(config: AxiosRequestConfig): AxiosPromise{
@@ -33,7 +34,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise{
       const responseHeaders = parseHeaders(request.getAllResponseHeaders())
       const responseData = responseType && responseType !== 'text' ? request.response : request.responseText;
       const response: AxiosResponse = {
-        data:transformResponse(responseData),
+        data: transform(responseData,config.headers,config.transformResponse),
         status: request.status,
         statusText: request.statusText,
         headers: responseHeaders,

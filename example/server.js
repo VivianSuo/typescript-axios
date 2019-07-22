@@ -100,6 +100,30 @@ router.all('/extend/put',(req,res,next)=>{
   })
   next()
 })
+
+router.get('/extend/user',(req,res)=>{
+  res.json({
+    code:200,
+    message:'ok',
+    result:{
+      name: 'zhangsan',
+      age: 22
+    }
+    
+  })
+})
+
+router.get('/interceptor/get',(req,res)=>{
+  res.json({
+    data:0
+  })
+})
+
+router.post('/config/post',(req,res)=>{
+  res.json({
+    data:1
+  })
+})
 app.use(router)
 
 
