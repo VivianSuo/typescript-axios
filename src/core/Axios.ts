@@ -57,6 +57,7 @@ export default class Axios {
   }
 
   request(url:any,config?:any):AxiosPromise{
+    // debugger
     config = mergeConfig(this.defaults,config)
     if(typeof url === 'string'){
       if(!config){

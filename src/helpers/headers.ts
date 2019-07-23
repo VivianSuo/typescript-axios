@@ -47,7 +47,7 @@ export function parseHeaders(headers?:string):any{
   return parse
 }
 
-export function flatenHeaders(headers:any,methods:Method):any{
+export function flattenHeaders(headers:any,methods:Method):any{
   if(!headers){
     return 
   }

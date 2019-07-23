@@ -2,6 +2,7 @@ import { isPlainObject } from './util'
 // 请求时转换data对象为json字符串
 export function transformRequest(data:any):any{
   if(isPlainObject(data)){
+    // debugger
     data = JSON.stringify(data)
   }
   return data

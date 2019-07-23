@@ -3,16 +3,20 @@ export type Method = "get" | "GET" | "post" | "POST" | "delete" | "DELETE" | "pu
 
 // axios请求配置接口
 export interface AxiosRequestConfig {
-  url: string;
-  method?: Method;
-  data?: any;
-  params?: any;
-  headers?: any;
-  responseType?:XMLHttpRequestResponseType;
-  timeout?:number;
+  url?: string;  
+  method?: Method; // 请求方式
+  data?: any;  // 参数
+  params?: any; // 查询字符串参数
+  headers?: any; // 请求头
+  responseType?:XMLHttpRequestResponseType;  // 响应类型
+  timeout?:number;  // 请求超时
   [propName:string]:any;
-  transformRequest?: AxiosTransformer | AxiosTransformer[];
-  transformResponse?: AxiosTransformer | AxiosTransformer[];
+  transformRequest?: AxiosTransformer | AxiosTransformer[]; // 改变请求的函数
+  transformResponse?: AxiosTransformer | AxiosTransformer[]; // 改变响应的函数
+  cancelToken?:CancelToken; //  用来取消请求
+  withCredentials?:boolean; // 跨域请求是否携带cookie（默认情况下通源策略导致只有不跨域的请求才可以默认携带cookie，跨域的请求无法携带，需要配置xhr）
+  xsrfCookieName?:string;  // server端将token添加到cookie中，并用xsrfCookieName指向的字符串来表示
+  xsrfHeaderName?:string; //  请求发送的将token追加到请求的headers中，xsrfHeaderName指向的字符串来表示
 }
 
 export interface AxiosTransformer{
@@ -86,4 +90,46 @@ export interface RejectedFn{
 
 export interface AxiosStatic extends AxiosInstance{
   create(config?:any):AxiosInstance
+
+  CancelToken:CancelTokenStatic
+  Cancel:CancelStatic
+  isCancel:(value:any)=>boolean
+}
+
+//
+export interface CancelToken{
+  promise: Promise<Cancel>;
+  reason?:Cancel
+  throwIfRequested():void
+}
+
+export interface Canceler{
+  (message?:string):void
+}
+
+export interface CancelExecutor{
+  (cancel:Canceler):void
+}
+
+export interface CancelTokenSource{
+  token:CancelToken;
+  cancel:Canceler;
+}
+
+export interface CancelTokenStatic{
+  new(executor:CancelExecutor):CancelToken;
+  source():CancelTokenSource
+}
+
+export interface Cancel{
+  message?:string
+}
+
+export interface CancelStatic{
+  new(message?:string):Cancel
+}
+
+export interface URLOrigin{
+  protocal:string, // 协议
+  host:string      // ip和端口号
 }

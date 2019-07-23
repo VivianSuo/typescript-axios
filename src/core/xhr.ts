@@ -3,12 +3,46 @@ import { parseHeaders } from '../helpers/headers'
 import { transformResponse } from '../helpers/data'
 import { AxiosError } from '../helpers/error';
 import transform from './transform'
+import { isURLSameOrigin } from '../helpers/util'
 // 发送http请求的方法
 // 定义了AxiosPromise接口继承了Promise<AxiosResponse>泛型，那么函数返回的值是promise且其构造函数的参数是AxiosResponse类型
 export default function xhr(config: AxiosRequestConfig): AxiosPromise{
   return new Promise((resolve,reject)=>{
-    const { data = null, url, method = 'get', headers = {}, responseType, timeout } = config;
+    // debugger
+
+
+    const { data = null, url, method = 'get', headers = {}, responseType, timeout, cancelToken, withCredentials, xsrfCookieName, xsrfHeaderName } = config;
+
     const request = new XMLHttpRequest();
+    if (cancelToken){
+      // debugger;
+      // tslint:disable-next-line: no-floating-promises
+      cancelToken.promise.then(reason=>{
+        // 如果配置中定义了cancelToken的化，cancelToken是一个拥有promise函数和reason属性的类
+        console.log('then')
+        // 中断当前请求
+        request.abort();
+        // 传递中断原因
+        reject(reason);
+      })
+    }
+    
+    
+    if (withCredentials) {
+      request.withCredentials = true;
+    }
+
+    if(withCredentials || isURLSameOrigin(url!)){
+
+      const cookies = document.cookie.split(';').forEach((item)=>{
+        const obj:string[]= item.split('=');
+        if(obj[0] === xsrfCookieName && obj[1]){
+          headers[xsrfHeaderName!] = xsrfCookieName
+        }
+        
+      });
+      const match = cookies.
+    }
     // 为请求添加响应类型
     if(responseType){
       request.responseType = responseType;
@@ -18,7 +52,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise{
       request.timeout = timeout;
     }
 
-    request.open(method.toUpperCase(), url, true)
+    request.open(method.toUpperCase(), url!, true)
 
     request.onreadystatechange = function(){
       // 监听请求响应事件，readyState！==4时说明请求失败
@@ -33,6 +67,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise{
       // 获取响应头
       const responseHeaders = parseHeaders(request.getAllResponseHeaders())
       const responseData = responseType && responseType !== 'text' ? request.response : request.responseText;
+      // debugger
       const response: AxiosResponse = {
         data: transform(responseData,config.headers,config.transformResponse),
         status: request.status,

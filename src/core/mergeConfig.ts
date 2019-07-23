@@ -5,7 +5,7 @@ interface Strats{
 }
 export default function mergeConfig(
   config1: AxiosRequestConfig,
-  config2?: any
+  config2?: AxiosRequestConfig
 ): AxiosRequestConfig{
   // debugger
   let strats: Strats = {}
@@ -27,11 +27,12 @@ export default function mergeConfig(
     config[key] = strat(config1[key],config2![key])
   }
   function defaultStrat(val1: any, val2: any): any {
-    if (typeof val2 !== 'undefined') {
-      return val2
-    }else{
-      return val1
-    }
+    return typeof val2 !== 'undefined' ? val2 : val1
+    // if (typeof val2 !== 'undefined') {
+    //   return val2
+    // }else{
+    //   return val1
+    // }
   }
   function fromVal2Strat(val1:any,val2:any):any{
     if(typeof val2 !== 'undefined'){
@@ -57,6 +58,7 @@ export default function mergeConfig(
   stratKeysDeepMerge.forEach(key=>{
     strats[key] = deepMergeStrat
   })
+  // debugger
   return config
 }
 

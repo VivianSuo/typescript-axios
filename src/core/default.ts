@@ -9,7 +9,6 @@ const defaults: AxiosRequestConfig = {
       Accept:'application//json,text/plain,*/*'
     }
   },
-  url:'',
   transformRequest:[
     function(data:any,headers:any):any{
       processHeaders(headers,data);
@@ -21,7 +20,9 @@ const defaults: AxiosRequestConfig = {
     function(data:any):any{
       return transformResponse(data)
     }
-  ]
+  ],
+  xsrfCookieName:'XSRF-TOKEN', // 默认的token对应的cookie名
+  xsrfHeaderName:'X-XSRF-TOKEN' // 默认的token对应的header名
   
 }
 

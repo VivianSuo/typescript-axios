@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParse = require("body-parser");
+const cookieParser = require("cookie-parser");
 const webpack = require("webpack");
 const webpackDevMiddleware = require("webpack-dev-middleware");
 const webpackHotMiddleware = require("webpack-hot-middleware");
@@ -27,7 +28,16 @@ app.use(bodyParse.json())
 
 app.use(bodyParse.urlencoded({extended: true}))
 
+app.use(cookieParser())
+
 const port = process.env.PORT || 8083
+
+const cors = {
+  'Access-Control-Allow-Origin': 'http://localhost:8083',
+  'Access-Control-Allow-Credentials': true,
+  'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type'
+}
 
 router.get("/simple/get",(req,res)=>{
   res.json({
@@ -123,6 +133,25 @@ router.post('/config/post',(req,res)=>{
   res.json({
     data:1
   })
+})
+
+router.get("/cancel/get",(req,res)=>{
+  res.json({
+    data:'ok'
+  })
+})
+
+router.post("/cancel/post",(req,res)=>{
+  res.json({
+    data:'perfect'
+  })
+})
+
+router.get('/more/get',(req,res)=>{
+  // res.set(cors)
+  
+  res.json(req.cookies)
+
 })
 app.use(router)
 

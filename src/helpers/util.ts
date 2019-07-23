@@ -1,4 +1,5 @@
 const toString = Object.prototype.toString;
+
 // Object.prototype.toString.call(val) === '[object type]'来判定val的类型主要是object的各种类型
 // val is Date类型保护，可以在使用isDate方法时指定为true的分支中是Date类型false分支中不是Date类型，即在为true的分支中可以用Date类型对象的属性和方法来。
 export function isDate (val:any):val is Date{
@@ -40,4 +41,21 @@ export function deepMerge(...objs:any[]):any{
     }
   })
   return result
+}
+
+// 判定是否是同源
+export function isURLSameOrigin(url:string):boolean{
+  const {protocol,host} = resolveURL(url);
+  const currentOrigin = window.location;
+  return protocol === currentOrigin.protocol && host === currentOrigin.host
+}
+
+function resolveURL(url:any){
+  const aDom = document.createElement('a');
+  aDom.setAttribute('href',url)
+  const { protocol, host } = aDom
+  return {
+    protocol,
+    host
+  }
 }
