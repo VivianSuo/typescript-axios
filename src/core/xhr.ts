@@ -13,7 +13,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise{
     // debugger
 
 
-    const { data = null, url, method = 'get', headers = {}, responseType, timeout, cancelToken, withCredentials, xsrfCookieName, xsrfHeaderName, onDownloadProgress, onUploadProgress, auth} = config;
+    const { data = null, url, method = 'get', headers = {}, responseType, timeout, cancelToken, withCredentials, xsrfCookieName, xsrfHeaderName, onDownloadProgress, onUploadProgress, auth, validateStatus} = config;
 
     const request = new XMLHttpRequest();
     request.open(method.toUpperCase(), url!, true);
@@ -126,9 +126,9 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise{
     }
     // 网络http状态码判定
     function handleResponse(response: AxiosResponse) {
-      if (response.status >= 200 && response.status <= 300) {
+      if (!validateStatus || validateStatus(response.status)){
         resolve(response)
-      } else {
+      }else {
         reject(new AxiosError(`Request failed with status code ${response.status}`, config, null, request, response))
       }
     }

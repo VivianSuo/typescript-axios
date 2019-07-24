@@ -182,6 +182,11 @@ router.post('/authorization/post',(req,res)=>{
     res.end("UnAuthorization")
   }
 })
+
+router.get('/validateStatus/304',(req,res)=>{
+  res.status(304);
+  res.end();
+})
 app.use(router)
 
 
