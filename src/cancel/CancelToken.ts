@@ -17,7 +17,7 @@ export default class CancelToken{
     // 执行器函数，作用是用来判定是否
     executor(message=>{
       if(this.reason){
-        debugger
+        // debugger
         return 
       }
       this.reason = new CancelObj(message)

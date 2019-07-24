@@ -17,6 +17,9 @@ export interface AxiosRequestConfig {
   withCredentials?:boolean; // 跨域请求是否携带cookie（默认情况下通源策略导致只有不跨域的请求才可以默认携带cookie，跨域的请求无法携带，需要配置xhr）
   xsrfCookieName?:string;  // server端将token添加到cookie中，并用xsrfCookieName指向的字符串来表示
   xsrfHeaderName?:string; //  请求发送的将token追加到请求的headers中，xsrfHeaderName指向的字符串来表示
+  onDownloadProgress?:(e: ProgressEvent)=>void;
+  onUploadProgress?:(e: ProgressEvent)=>void;
+  auth?:AxiosBasicCredentials; // 用户的认证信息，配置该项后会自动在http请求的headers中添加
 }
 
 export interface AxiosTransformer{
@@ -132,4 +135,9 @@ export interface CancelStatic{
 export interface URLOrigin{
   protocal:string, // 协议
   host:string      // ip和端口号
+}
+
+export interface AxiosBasicCredentials{
+  username:string
+  password:string
 }

@@ -1,10 +1,13 @@
 const express = require("express");
 const bodyParse = require("body-parser");
 const cookieParser = require("cookie-parser");
+const multipart = require('connect-multiparty');
 const webpack = require("webpack");
 const webpackDevMiddleware = require("webpack-dev-middleware");
 const webpackHotMiddleware = require("webpack-hot-middleware");
 const webpackConfig = require("./webpack.config");
+const path = require("path");
+const atob = require('atob');
 
 const app = express()
 const compiler = webpack(webpackConfig)
@@ -22,7 +25,7 @@ app.use(webpackDevMiddleware(compiler, {
 app.use(webpackHotMiddleware(compiler))
 
 // 静态文件以当前文件为请求跟目录路径
-app.use(express.static(__dirname))
+// app.use(express.static(__dirname))
 
 app.use(bodyParse.json())
 
@@ -30,14 +33,17 @@ app.use(bodyParse.urlencoded({extended: true}))
 
 app.use(cookieParser())
 
-const port = process.env.PORT || 8083
+app.use(express.static(__dirname,{
+  setHeaders(res){
+    res.cookie('XSRF-TOKEN-D','12345abc')
+  }
+}))
 
-const cors = {
-  'Access-Control-Allow-Origin': 'http://localhost:8083',
-  'Access-Control-Allow-Credentials': true,
-  'Access-Control-Allow-Methods': 'POST, GET, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type'
-}
+// 中间件作用处理上传请求并指定上传的目录
+app.use(multipart({
+  uploadDir:path.resolve(__dirname,'upload-file')
+}))
+const port = process.env.PORT || 8083
 
 router.get("/simple/get",(req,res)=>{
   res.json({
@@ -152,6 +158,29 @@ router.get('/more/get',(req,res)=>{
   
   res.json(req.cookies)
 
+})
+
+router.post('/progress/upload',(req,res)=>{
+  console.log(req.body,req.files)
+  res.end('upload success')
+})
+
+router.post('/authorization/post',(req,res)=>{
+  console.log(req.headers)
+  const auth = req.headers.authorization;
+  const [type, credentials] = auth.split(' ');
+  console.log(atob(credentials)) // base64解码
+  const [username,password] = atob(credentials).split(':');
+  if (type === 'Basic' && username === 'hahalia' && password === '323423d'){
+    res.json({
+      ok:true,
+      username,
+      password,
+      usernameAndPasswordByBase64:credentials
+    })
+  }else{
+    res.end("UnAuthorization")
+  }
 })
 app.use(router)
 

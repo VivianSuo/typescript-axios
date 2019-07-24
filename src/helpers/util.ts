@@ -59,3 +59,7 @@ function resolveURL(url:any){
     host
   }
 }
+
+export function isFormData(val:any):boolean{
+  return typeof val !== 'undefined' && val instanceof FormData
+}

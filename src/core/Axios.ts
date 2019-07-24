@@ -58,7 +58,7 @@ export default class Axios {
 
   request(url:any,config?:any):AxiosPromise{
     // debugger
-    config = mergeConfig(this.defaults,config)
+    
     if(typeof url === 'string'){
       if(!config){
         config = {}
@@ -67,7 +67,7 @@ export default class Axios {
     }else{
       config = url
     }
-
+    config = mergeConfig(this.defaults, config)
     // chain数组的作用是用来存储请求拦截、请求、响应拦截的成功和失败函数组成的对象，默认只有请求成功的方法
     const chain:PromiseChain[] = [{
       resolved: dispatchRequest,

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>progress</title>
+  <style>
+    body{
+      width:400px;
+    }
+  </style>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/nprogress@0.2.0/nprogress.css">
+  <script src="https://unpkg.com/nprogress@0.2.0/nprogress.js"></script>
+</head>
+<body>
+  <button id="start">开始</button>
+  <button id="end">停止</button>
+  <h1>file download</h1>
+  <div>
+    <button id="download" class="btn btn-primary">Download</button>
+  </div>
+  <h1>file upload</h1>
+  <form role="form" class="form" onsubmit="return false;">
+    <input id="file" type="file" class="form-control" />
+    <button id="upload" type="button" class="btn btn-primary">Upload</button>
+  </form>
+  <script src="/__build__/progress.js"></script>
+  <script>
+    const start = document.getElementById('start')
+    const end = document.getElementById('end')
+
+    start.onclick = function(){
+      NProgress.start()
+    }
+    end.onclick = function(){
+      NProgress.done()
+      NProgress.remove()
+    }
+  </script>
+</body>
+</html>

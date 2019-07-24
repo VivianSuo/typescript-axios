@@ -20,8 +20,9 @@ function createInstance(config:AxiosRequestConfig):AxiosStatic{
 // axios 是一个混合对象，本身是一个函数，又拥有Axios类的所有原型和实例属性
 const axios = createInstance(defaults);
 axios.create = function create(config:any){
-  // return createInstance(mergeConfig(defaults,config))
-  return createInstance(config)
+  // debugger;
+  return createInstance(mergeConfig(defaults,config))
+  // return createInstance(config)
 }
 axios.CancelToken = CancelToken;
 axios.Cancel = Cancel;
