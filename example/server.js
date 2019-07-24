@@ -187,6 +187,11 @@ router.get('/validateStatus/304',(req,res)=>{
   res.status(304);
   res.end();
 })
+router.get('/paramSerializer/get', (req, res) => {
+  res.json({
+    ok:true
+  })
+})
 app.use(router)
 
 

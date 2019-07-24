@@ -21,6 +21,7 @@ export interface AxiosRequestConfig {
   onUploadProgress?:(e: ProgressEvent)=>void;
   auth?:AxiosBasicCredentials; // 用户的认证信息，配置该项后会自动在http请求的headers中添加
   validateStatus?:(status:number)=>boolean; // 自定义合法状态
+  paramsSerializer?:(params:any)=>string; // 参数序列化
 }
 
 export interface AxiosTransformer{

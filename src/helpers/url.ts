@@ -13,35 +13,45 @@ function encode (val:string):string{
     .replace(/%5D/gi, ']')
 }
 
-export function buildURl (url:string,params:any):string{
+export function buildURl (url:string,params:any,paramsSerializer?:(params:any)=>string):string{
   if(!params){
     return url
   }
-  // 用于存放key=value
-  let parts:string[] = []
-  Object.keys(params).forEach(key=>{
-    let val = params[key];
-    if(val === null || typeof val === 'undefined'){
-      return 
-    }
-    let values:string[] = []
-    if(Array.isArray(val)){
-      key += '[]';
-      values = val
-    }else{
-      values = [val]
-    }
-    values.forEach(val=>{
-      // 由于isDate方法利用来typescript的自定义类型保护，在if分支中将val认定为是Date类型，才可以用Date类型对象的toISOString方法。否则会报错。下面的isPlainObject同理
-      if(isDate(val)){
-        val = val.toISOString()
-      } else if (isPlainObject(val)){
-        val = JSON.stringify(val)
+  let serializedParams;
+  debugger;
+  if (paramsSerializer){
+    debugger
+    serializedParams = paramsSerializer(params)
+  }else if(isURLSearchParams(params)){
+    serializedParams = params.toString()
+  }else{
+    // 用于存放key=value
+    let parts: string[] = []
+    Object.keys(params).forEach(key => {
+      let val = params[key];
+      if (val === null || typeof val === 'undefined') {
+        return
       }
-      parts.push(`${encode(key)}=${encode(val)}`)
+      let values: string[] = []
+      if (Array.isArray(val)) {
+        key += '[]';
+        values = val
+      } else {
+        values = [val]
+      }
+      values.forEach(val => {
+        // 由于isDate方法利用来typescript的自定义类型保护，在if分支中将val认定为是Date类型，才可以用Date类型对象的toISOString方法。否则会报错。下面的isPlainObject同理
+        if (isDate(val)) {
+          val = val.toISOString()
+        } else if (isPlainObject(val)) {
+          val = JSON.stringify(val)
+        }
+        parts.push(`${encode(key)}=${encode(val)}`)
+      })
     })
-  })
-  let serializedParams = parts.join("&");
+    serializedParams = parts.join("&");
+  }
+  
   if(serializedParams){
     let hashIndex = url.indexOf('#');
     if(hashIndex > -1){
@@ -50,4 +60,8 @@ export function buildURl (url:string,params:any):string{
     url += (url.indexOf('?') > -1 ? '&' : '?') + serializedParams
   }
   return url
+}
+
+function isURLSearchParams(params:any) :params is URLSearchParams{
+  return typeof params !== 'undefined' && params instanceof URLSearchParams
 }
