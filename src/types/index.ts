@@ -1,3 +1,5 @@
+import Axios from "../core/Axios";
+
 // 自定义类型
 export type Method = "get" | "GET" | "post" | "POST" | "delete" | "DELETE" | "put" | "PUT" | "head" | "HEAD" | "options" | "OPTIONS" | "patch" | "PATCH"
 
@@ -22,6 +24,7 @@ export interface AxiosRequestConfig {
   auth?:AxiosBasicCredentials; // 用户的认证信息，配置该项后会自动在http请求的headers中添加
   validateStatus?:(status:number)=>boolean; // 自定义合法状态
   paramsSerializer?:(params:any)=>string; // 参数序列化
+  baseURL?:string; // 基础路径 ,当url为绝对路径时，不会再拼接baseURL；只有当url为绝对路径时才会拼接baseURL
 }
 
 export interface AxiosTransformer{
@@ -99,6 +102,10 @@ export interface AxiosStatic extends AxiosInstance{
   CancelToken:CancelTokenStatic
   Cancel:CancelStatic
   isCancel:(value:any)=>boolean
+
+  all<T>(promise:Array<T|Promise<T>>):Promise<T[]>
+  spread<T,R>(callback:(...arg:T[])=>R):(arr:T[])=>R
+  Axios:AxiosClassStatic
 }
 
 //
@@ -143,3 +150,8 @@ export interface AxiosBasicCredentials{
   username:string
   password:string
 }
+
+export interface AxiosClassStatic{
+  new (config:AxiosRequestConfig):Axios
+}
+

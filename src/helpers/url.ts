@@ -18,9 +18,9 @@ export function buildURl (url:string,params:any,paramsSerializer?:(params:any)=>
     return url
   }
   let serializedParams;
-  debugger;
+  // debugger;
   if (paramsSerializer){
-    debugger
+    // debugger
     serializedParams = paramsSerializer(params)
   }else if(isURLSearchParams(params)){
     serializedParams = params.toString()
@@ -64,4 +64,12 @@ export function buildURl (url:string,params:any,paramsSerializer?:(params:any)=>
 
 function isURLSearchParams(params:any) :params is URLSearchParams{
   return typeof params !== 'undefined' && params instanceof URLSearchParams
+}
+
+export function isAbsoluteURL(url:string):boolean{
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url)
+}
+
+export function combineURL(baseURL:string,relativeURL?:string):string {
+  return relativeURL? baseURL.replace('/\/+$/','') + relativeURL.replace('/^\/+/','') : baseURL
 }

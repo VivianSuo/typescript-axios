@@ -1,10 +1,11 @@
 import { AxiosRequestConfig, AxiosPromise } from '../types'
 import xhr from './xhr'
-import { buildURl } from '../helpers/url'
+import { buildURl, isAbsoluteURL, combineURL } from '../helpers/url'
 import { transformRequest } from '../helpers/data'
 import { processHeaders, flattenHeaders } from '../helpers/headers'
 import transform from './transform'
-export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
+import { isAbsolute } from 'path';
+export function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
   throwIfCancellationRequested(config)
   processConfig(config)
   return xhr(config)
@@ -13,16 +14,19 @@ export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromis
 function processConfig(config: AxiosRequestConfig): void {
   config.url = transformUrl(config)
   config.headers = transformHeaders(config)
-  debugger
+  // debugger
   config.data = transformRequestData(config)
   // config.data = transform(config.data, config.headers, config.transformRequest)
   config.headers = flattenHeaders(config.headers,config.method!)
 }
 
 // 单独用来处理url的方法
-function transformUrl(config: AxiosRequestConfig): string {
-  debugger
-  const { url, params, paramsSerializer } = config
+export function transformUrl(config: AxiosRequestConfig): string {
+  // debugger
+  let { url, params, paramsSerializer,baseURL } = config;
+  if (baseURL && !isAbsoluteURL(url!)){
+    url = combineURL(baseURL,url)
+  }
   return buildURl(url!, params, paramsSerializer)
 
 }

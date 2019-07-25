@@ -192,6 +192,18 @@ router.get('/paramSerializer/get', (req, res) => {
     ok:true
   })
 })
+
+router.get('/all_spread/getA',(req,res)=>{
+  res.json({
+    a:1
+  })
+})
+
+router.get('/all_spread/getB', (req, res) => {
+  res.json({
+    b: 2
+  })
+})
 app.use(router)
 
 
