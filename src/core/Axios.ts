@@ -70,6 +70,7 @@ export default class Axios {
       config = url
     }
     config = mergeConfig(this.defaults, config)
+    config.method = config.method.toLowerCase()
     // chain数组的作用是用来存储请求拦截、请求、响应拦截的成功和失败函数组成的对象，默认只有请求成功的方法
     const chain:PromiseChain[] = [{
       resolved: dispatchRequest,
@@ -101,15 +102,15 @@ export default class Axios {
   }
 
   delete(url: string, config?: AxiosRequestConfig): AxiosPromise {
-    return this._requestMethodWithoutData('get', url, config)
+    return this._requestMethodWithoutData('delete', url, config)
   }
 
   head(url: string, config?: AxiosRequestConfig): AxiosPromise {
-    return this._requestMethodWithoutData('get', url, config)
+    return this._requestMethodWithoutData('head', url, config)
   }
 
   options(url: string, config?: AxiosRequestConfig): AxiosPromise {
-    return this._requestMethodWithoutData('get', url, config)
+    return this._requestMethodWithoutData('options', url, config)
   }
 
   post(url:string,data?:any,config?:AxiosRequestConfig):AxiosPromise{
@@ -117,11 +118,11 @@ export default class Axios {
   }
 
   put(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise {
-    return this._requestMethodWithData('post', url, data, config)
+    return this._requestMethodWithData('put', url, data, config)
   }
 
   patch(url: string, data?: any, config?: AxiosRequestConfig): AxiosPromise {
-    return this._requestMethodWithData('post', url, data, config)
+    return this._requestMethodWithData('patch', url, data, config)
   }
 
   _requestMethodWithoutData(method:Method,url:string,config?:AxiosRequestConfig):AxiosPromise{

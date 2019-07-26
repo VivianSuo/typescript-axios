@@ -13,7 +13,7 @@ function encode (val:string):string{
     .replace(/%5D/gi, ']')
 }
 
-export function buildURl (url:string,params:any,paramsSerializer?:(params:any)=>string):string{
+export function buildURl (url:string,params?:any,paramsSerializer?:(params:any)=>string):string{
   if(!params){
     return url
   }
@@ -62,7 +62,7 @@ export function buildURl (url:string,params:any,paramsSerializer?:(params:any)=>
   return url
 }
 
-function isURLSearchParams(params:any) :params is URLSearchParams{
+export function isURLSearchParams(params:any) :params is URLSearchParams{
   return typeof params !== 'undefined' && params instanceof URLSearchParams
 }
 
@@ -71,5 +71,5 @@ export function isAbsoluteURL(url:string):boolean{
 }
 
 export function combineURL(baseURL:string,relativeURL?:string):string {
-  return relativeURL? baseURL.replace('/\/+$/','') + relativeURL.replace('/^\/+/','') : baseURL
+  return relativeURL? baseURL.replace(/\/+$/,'') + '/'+relativeURL.replace(/^\/+/,'') : baseURL
 }
